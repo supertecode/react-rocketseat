@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fundamentos</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --text: #ebebeb;
+        --text-secondary: #6b6b6b;
+        --primary: #462878;
+        --background: #2d2a37;
+
+        --gradient: 180deg, rgba(0, 0, 0, 0.05) 0%,
+          rgba(255, 255, 255, 0.05) 100%;
+
+        --gradient-hover: 180deg, rgba(0, 0, 0, 0.1) 0%,
+          rgba(255, 255, 255, 0.1) 100%;
+
+        --shadow: 0px 11px 7px 0px rgba(0, 0, 0, 0.01),
+          0px 7px 7px 0px rgba(0, 0, 0, 0.04),
+          0px 4px 6px 0px rgba(0, 0, 0, 0.1),
+          0px 2px 4px 0px rgba(0, 0, 0, 0.26),
+          0px 0px 2px 0px rgba(0, 0, 0, 0.29),
+          0px 2px 3px 0px rgba(255, 255, 255, 0.06) inset;
+
+        --font-sans: "Rubik", sans-serif;
+      }
+    </style>
+    <script type="text/babel">
+      //Aqui vamos tentar criar uma calculadora do zero, primeiro precisamos definir bem nossos componentes e a nossa configuração de estilo.
+
+      const textVariants = {
+        default: "text-xl",
+        muted: "text-xl text-(--text-secondary)",
+        heading: "text-2xl",
+        blast: "text-3xl",
+      };
+
+      function Text({
+        as = "span",
+        variant = "default",
+        className,
+        children,
+        ...props
+      }) {
+        return React.createElement(
+          as,
+          {
+            className: `${textVariants[variant]} ${
+              className ? className : (className = "")
+            }`,
+            ...props,
+          },
+          children
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <div className="p-3">
+              <Text>Botão contador </Text>
+            </div>
+            <div>
+              <Button></Button>
+            </div>
+          </>
+        );
+
+        function Button({ variant = "default", children, ...props }) {
+          const [counter, setCounter] = React.useState(0);
+
+          return (
+            <>
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300"
+                onClick={() => {
+                  setCounter(counter + 1);
+                }}
+              >
+                incrementar
+              </button>
+              <p className="p-3">{counter}</p>
+            </>
+          );
+        }
+      }
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

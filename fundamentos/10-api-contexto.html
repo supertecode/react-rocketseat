@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fundamentos</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      //
+      // Criando a API de contexto
+      const CounterContext = React.createContext();
+
+      function CounterProvider({ children }) {
+        const [savedCounts, setSavedCounts] = React.useState([]);
+
+        function saveCount(count) {
+          setSavedCounts((prev) => [...prev, count]); //está colocando o novo contador ao final da lista
+        }
+
+        return (
+          <CounterContext.Provider value={{ savedCounts, saveCount }}>
+            {children}
+          </CounterContext.Provider>
+        );
+      }
+      // Fim da criação da API de contexto
+
+      function Counter() {
+        const [counter, setCounter] = React.useState(0);
+        const { saveCount } = React.useContext(CounterContext);
+        const { savedCounts } = React.useContext(CounterContext);
+
+        return (
+          <>
+            <p>Contador: {counter} </p>
+            <button onClick={() => setCounter(10)}>Atualizar</button>
+            <button onClick={() => setCounter((prevVelue) => prevVelue + 1)}>
+              Incrementar
+            </button>
+            <button onClick={() => setCounter((prevVelue) => prevVelue - 1)}>
+              Decrementar
+            </button>
+            <button onClick={() => saveCount(counter)}>Salvar</button>
+            <h1>Contadores Salvos</h1>
+            <ul>
+              {savedCounts.map((count, index) => (
+                <li key={`${index}`}>{count}</li>
+              ))}
+            </ul>
+          </>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="p-3">
+            <CounterProvider>
+              <Counter />
+            </CounterProvider>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
+
+<h3>Anotações importantes:</h3>
+<p>
+  - É necessário fazer a definição a API de contexto. Ela recebe children e
+  retora children também.
+</p>
+<p>- const CounterContext é um componente</p>
+<p>- É preciso fazer referencia ao contexto nos componetes que irão usá-lo</p>
+<p>
+  - É preciso encapsular os compoentes com o provider para que eles consigam
+  acessar o contexto
+</p>
+<p>- Tanto variáveis quanto constantes podem ser passadas por contexto</p>
+<p>
+  - No CounterProvider é preciso fazer o retorno com o value={{item1, item2...}}
+</p>
